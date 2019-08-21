@@ -1,0 +1,206 @@
+PROBLEM SET 04:
+==============
+
+
+TABLE CREATION:
+===============
+
+mysql> select * from Highschooler;
++------+-----------+-------+
+| ID   | name      | grade |
++------+-----------+-------+
+| 1510 | Jordan    |     9 |
+| 1689 | Gabriel   |     9 |
+| 1381 | Tiffany   |     9 |
+| 1709 | Cassandra |     9 |
+| 1101 | Haley     |    10 |
+| 1782 | Andrew    |    10 |
+| 1468 | Kris      |    10 |
+| 1641 | Brittany  |    10 |
+| 1247 | Alexis    |    11 |
+| 1316 | Austin    |    11 |
+| 1911 | Gabriel   |    11 |
+| 1501 | Jessica   |    11 |
+| 1304 | Jordan    |    12 |
+| 1025 | John      |    12 |
+| 1934 | Kyle      |    12 |
+| 1661 | Logan     |    12 |
++------+-----------+-------+
+16 rows in set (0.00 sec)
+
+mysql> select * from Friend;
++------+------+
+| ID1  | ID2  |
++------+------+
+| 1510 | 1381 |
+| 1510 | 1689 |
+| 1689 | 1709 |
+| 1381 | 1247 |
+| 1709 | 1247 |
+| 1689 | 1782 |
+| 1782 | 1468 |
+| 1782 | 1316 |
+| 1782 | 1304 |
+| 1468 | 1101 |
+| 1468 | 1641 |
+| 1101 | 1641 |
+| 1247 | 1911 |
+| 1247 | 1501 |
+| 1911 | 1501 |
+| 1501 | 1934 |
+| 1316 | 1934 |
+| 1934 | 1304 |
+| 1304 | 1661 |
+| 1661 | 1025 |
+| 1381 | 1510 |
+| 1689 | 1510 |
+| 1709 | 1689 |
+| 1247 | 1381 |
+| 1247 | 1709 |
+| 1782 | 1689 |
+| 1468 | 1782 |
+| 1316 | 1782 |
+| 1304 | 1782 |
+| 1101 | 1468 |
+| 1641 | 1468 |
+| 1641 | 1101 |
+| 1911 | 1247 |
+| 1501 | 1247 |
+| 1501 | 1911 |
+| 1934 | 1501 |
+| 1934 | 1316 |
+| 1304 | 1934 |
+| 1661 | 1304 |
+| 1025 | 1661 |
++------+------+
+40 rows in set (0.02 sec)
+
+mysql> select * from Likes;
++------+------+
+| ID1  | ID2  |
++------+------+
+| 1689 | 1709 |
+| 1709 | 1689 |
+| 1782 | 1709 |
+| 1911 | 1247 |
+| 1247 | 1468 |
+| 1641 | 1468 |
+| 1316 | 1304 |
+| 1501 | 1934 |
+| 1934 | 1501 |
+| 1025 | 1101 |
++------+------+
+10 rows in set (0.00 sec)
+
+
+
+
+SOLUTION:
+=========
+
+1.Find the names of all students who are friends with someone named Gabriel. (1 point possible)
+
+mysql> select distinct name from Highschooler where ID in (select ID1 from Friend where ID2 in (select ID from Highschooler where name="Gabriel"));
++-----------+
+| name      |
++-----------+
+| Jordan    |
+| Cassandra |
+| Andrew    |
+| Alexis    |
+| Jessica   |
++-----------+
+5 rows in set (0.12 sec)
+
+
+2.For every student who likes someone 2 or more grades younger than themselves, return that student's name and grade, and the name and grade of the student they like. (1 point possible)
+
+mysql> select h1.name,h1.grade,h2.name,h2.grade from Highschooler h1 join Likes
+l on h1.ID=l.ID1 join Highschooler h2 on h2.ID=l.ID2 where (h1.grade - h2.grade)>=2;
++------+-------+-------+-------+
+| name | grade | name  | grade |
++------+-------+-------+-------+
+| John |    12 | Haley |    10 |
++------+-------+-------+-------+
+1 row in set (0.00 sec)
+
+
+3.For every pair of students who both like each other, return the name and grade of both students. Include each pair only once, with the two names in alphabetical order. (1 point possible)
+
+
+
+4.Find all students who do not appear in the Likes table (as a student who likes or is liked) and return their names and grades. Sort by grade, then by name within each grade. (1 point possible)
+
+mysql> select name,ID,grade from Highschooler where ID not in (select ID1 from Likes) and ID not in (select ID2 from Likes) order by grade,name;
++---------+------+-------+
+| name    | ID   | grade |
++---------+------+-------+
+| Jordan  | 1510 |     9 |
+| Tiffany | 1381 |     9 |
+| Logan   | 1661 |    12 |
++---------+------+-------+
+3 rows in set (0.00 sec)
+
+
+5.For every situation where student A likes student B, but we have no information about whom B likes (that is, B does not appear as an ID1 in the Likes table), return A and B's names and grades. (1 point possible)
+
+6.Find names and grades of students who only have friends in the same grade. Return the result sorted by grade, then by name within each grade. (1 point possible)
+
+7.For each student A who likes a student B where the two are not friends, find if they have a friend C in common (who can introduce them!). For all such trios, return the name and grade of A, B, and C. (1 point possible)
+
+
+
+8.Find the difference between the number of students in the school and the number of different first names. (1 point possible)
+
+mysql> SELECT COUNT(*) - COUNT(DISTINCT name)
+    -> FROM Highschooler;
++---------------------------------+
+| COUNT(*) - COUNT(DISTINCT name) |
++---------------------------------+
+|                               2 |
++---------------------------------+
+1 row in set (0.07 sec)
+
+
+
+9.Find the name and grade of all students who are liked by more than one other student. (1 point possible)
+
+mysql> select h.name,h.grade from Highschooler h join Likes l ON h.ID = l.ID2 gr
+oup by l.ID2 having count(*) > 1;
++-----------+-------+
+| name      | grade |
++-----------+-------+
+| Kris      |    10 |
+| Cassandra |     9 |
++-----------+-------+
+2 rows in set (0.01 sec)
+
+
+10.For every situation where student A likes student B, but student B likes a different student C, return the names and grades of A, B, and C. (1 point possible)
+
+
+
+11.Find those students for whom all of their friends are in different grades from themselves. Return the students' names and grades.(1 point possible)
+
+
+
+
+12.What is the average number of friends per student? (Your result should be just one number.) (1 point possible)
+
+mysql> select AVG(count) from (select count(*) AS noofppl from Friend group by I
+D1);
+ERROR 1248 (42000): Every derived table must have its own alias
+
+mysql> select AVG(noofppl) from (select count(*) AS noofppl from Friend group by
+ ID1) as T;
++--------------+
+| AVG(noofppl) |
++--------------+
+|       2.5000 |
++--------------+
+1 row in set (0.00 sec)
+
+
+13.Find the number of students who are either friends with Cassandra or are friends of friends of Cassandra. Do not count Cassandra, even though technically she is a friend of a friend.
+
+14.Find the name and grade of the student(s) with the greatest number of friends. (1 point possible)
