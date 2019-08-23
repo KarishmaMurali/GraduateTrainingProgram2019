@@ -277,9 +277,43 @@ lace_country=' USA';
 
 4.How many concerts have featured at least one composition by Andy Jones? List concert date, venue and the composition's title.
 
+
+mysql> select con_date,concert_venue,c_title from musician join composer
+     on m_no=comp_is
+     join has_composed on comp_no=cmpr_no
+     join composition on cmpn_no=c_no
+     join performance on c_no=performed
+     join concert on performed_in=concert_no
+     where m_name='Andy Jones';
+	 
++------------+---------------+----------------+
+| con_date   | concert_venue | c_title        |
++------------+---------------+----------------+
+| 1997-01-15 | Metropolitan  | A Simple Piece |
++------------+---------------+----------------+
+1 row in set (0.19 sec)
+
+
+
+
 5.List the different instruments played by the musicians and avg number of musicians who play the instrument.
 
-select distinct(pr.instrument),avg(cnt) from performer pr join musician m on m.m_no=pr.perf_is where cnt IN(select count(*) as cnt from performer pr join musician m on m.m_no=pr.perf_is);
+mysql> select instrument,avg(cnt) from (
+ select instrument,count(*) as cnt from performer group by perf_is) avgcnt
+     group by instrument;
++------------+----------+
+| instrument | avg(cnt) |
++------------+----------+
+| banjo      |   3.0000 |
+| bass       |   3.0000 |
+| cello      |   1.0000 |
+| guitar     |   3.0000 |
+| horn       |   1.0000 |
+| trumpet    |   2.0000 |
+| viola      |   2.5000 |
+| violin     |   2.2000 |
++------------+----------+
+8 rows in set (0.00 sec)
 
 
 
@@ -302,13 +336,82 @@ mysql> select m.m_name,m.born,pr.instrument from musician m join performer pr on
 8 rows in set (0.00 sec)
 
 
+
 7.List the name and the number of players for the band whose number of players is greater than the average number of players in each band.
+
+
+mysql> select band_name,count(*) from band join plays_in
+     on band_no=band_id
+     group by band_name
+     having count(*)>
+    (select avg(pl) from(select band_id,count(*) as pl from plays_in group by band_id) avgpl);
+	
++-----------+----------+
+| band_name | count(*) |
++-----------+----------+
+| AASO      |        7 |
+| Oh well   |        6 |
+| ROP       |        7 |
++-----------+----------+
+3 rows in set (0.01 sec)
+
 
 8.List the names of musicians who both conduct and compose and live in Britain.
 
+mysql> select distinct m_name from concert join composer on comp_is=concert_organiser
+      join musician on comp_is=m_no join  place
+      on living_in=place_no
+      where place_country='Britain';
+Empty set (0.00 sec)
+
+
 9.Show the least commonly played instrument and the number of musicians who play it.
 
+
+mysql> select instrument, cnt from (
+    ->    select instrument,cnt,DENSE_RANK() OVER(ORDER BY cnt) rnk from
+    ->        (
+    ->    select count(perf_is) as cnt,instrument
+    ->            from performer group by instrument
+    ->         ) T
+    ->      ) A
+    ->      where rnk=1;
++------------+-----+
+| instrument | cnt |
++------------+-----+
+| banjo      |   1 |
+| trumpet    |   1 |
+| cornet     |   1 |
+| trombone   |   1 |
+| horn       |   1 |
+| clarinet   |   1 |
++------------+-----+
+6 rows in set (0.00 sec)
+
+
+
+
 10.List the bands that have played music composed by Sue Little; Give the titles of the composition in each case. 
+
+mysql> select band_name,c_title as title from musician  join composer c
+     on m_no=comp_is join has_composed  on comp_no=cmpr_no
+     join composition on cmpn_no=c_no
+     join performance on c_no=performed
+     join band on gave=band_no
+     where m_name='Sue Little'
+     order by band_name,c_title;
+	 
++---------------------+----------------------+
+| band_name           | title                |
++---------------------+----------------------+
+| BBSO                | Slow Song            |
+| BBSO                | Slow SymphonyBlowing |
+| Somebody Loves this | Slow SymphonyBlowing |
+| Swinging strings    | Slow Song            |
+| The left Overs      | Slow Song            |
++---------------------+----------------------+
+5 rows in set (0.02 sec)
+
 
 
 
@@ -331,9 +434,67 @@ mysql> select m.m_name,pl.place_town from place pl join musician m on m.born_in=
 12.Create a list showing for EVERY musician born in Britain the number of compositions and the number of instruments played.
 
 13.Give the band name, conductor and contact of the bands performing at the most recent concert in the Royal Albert Hall.
+mysql> select band_name,m.m_name contact,m1.m_name conductor from band b
+      join performance p on band_no=gave
+      join concert c on concert_no=performed_in
+      join musician m on m.m_no=band_contact
+      join musician m1 on m1.m_no=conducted_by
+      where concert_venue='Royal Albert Hall';
+	  
++---------------------+-------------+------------+
+| band_name           | contact     | conductor  |
++---------------------+-------------+------------+
+| Somebody Loves this | Theo Mengel | Alan Fluff |
++---------------------+-------------+------------+
+1 row in set (0.02 sec)
+
 
 14.Give a list of musicians associated with Glasgow. Include the name of the musician and the nature of the association - one or more of 'LIVES_IN', 'BORN_IN', 'PERFORMED_IN' AND 'IN_BAND_IN'.
 
+mysql> (select m_name,"BORN_IN" status from musician join place
+     on born_in=place_no
+     where place_town='Glasgow'
+     union
+     select m_name,"LIVING_IN" status from musician join place
+     on living_in=place_no
+     where place_town='Glasgow'
+     union
+     select m_name,"PERFORMED_IN" status from musician join performance
+     on m_no=conducted_by
+     join concert on performed_in=concert_no
+     join place on concert_in=place_no
+     where place_town='Glasgow'
+     union
+     select m_name,"IN_BAND_IN" status from place join band
+     on place_no=band_home
+     join plays_in on band_no=band_id
+     join performer on player=perf_no
+     join musician on perf_is=m_no
+     where place_town='Glasgow')
+	 order by m_name;
++------------------+------------+
+| m_name           | status     |
++------------------+------------+
+| Andy Jones       | LIVING_IN  |
+| Davis Heavan     | IN_BAND_IN |
+| Elsie James      | IN_BAND_IN |
+| Harriet Smithson | LIVING_IN  |
+| Harry Forte      | IN_BAND_IN |
+| James Quick      | IN_BAND_IN |
+| James Steeple    | LIVING_IN  |
+| Jeff Dawn        | LIVING_IN  |
+| Jeff Dawn        | IN_BAND_IN |
+| John Smith       | IN_BAND_IN |
+| Louise Simpson   | BORN_IN    |
+| Louise Simpson   | LIVING_IN  |
+| Lovely Time      | BORN_IN    |
+| Steven Chaytors  | BORN_IN    |
+| Theo Mengel      | IN_BAND_IN |
++------------------+------------+
+15 rows in set (0.13 sec)
+
+
 15.Jeff Dawn plays in a band with someone who plays in a band with Sue Little. Who is it and what are the bands?
+
 
 
