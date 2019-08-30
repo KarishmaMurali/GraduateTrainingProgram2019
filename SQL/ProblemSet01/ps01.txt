@@ -346,17 +346,20 @@ mysql> select h.city,g.name,b.date_from
 
 12)List the hotel names and room numbers of any hotel rooms that have not been booked.
 
-mysql> select h.hotel_no,h.name,r.room_no
-    ->  from hotel h join room r on
-    ->  h.hotel_no=r.hotel_no
-    ->   where h.hotel_no NOT IN (select hotel_no from Booking);
-+----------+------------------+---------+
-| hotel_no | name             | room_no |
-+----------+------------------+---------+
-| H432     | Brownstone Hotel |     876 |
-| H432     | Brownstone Hotel |     898 |
-+----------+------------------+---------+
-2 rows in set (0.00 sec)
+mysql> select h.name,r.room_no,b.room_no
+    ->     from hotel
+    ->     h inner join room r
+    ->     on h.hotel_no = r.hotel_no
+    ->     left outer join booking b
+    ->     on h.hotel_no = b.hotel_no
+    -> where b.room_no is null;
++------------------+---------+---------+
+| name             | room_no | room_no |
++------------------+---------+---------+
+| Brownstone Hotel |     876 |    NULL |
+| Brownstone Hotel |     898 |    NULL |
++------------------+---------+---------+
+2 rows in set (0.05 sec)
 
 
 
