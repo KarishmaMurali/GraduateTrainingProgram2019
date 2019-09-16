@@ -209,7 +209,29 @@ def getRatios(vect1, vect2):
 	"""Assumes: vect1 and vect2 are lists of equal length of numbers
 	Returns: a list containing the meaningful values of
 	vect1[i]/vect2[i]"""
-    
+ 
+ 
+ 
+ def getRatios(vect1,vect2):
+    ratio=[]
+
+    for i in range(0,len(vect1)):
+        try:
+            ratio.append(vect1[i]/(vect2[i]))
+        except :
+            ratio.append("invalid")
+
+    return ratio
+
+ratio1=[1,2,3,4,5]
+ratio2=[6,7,8,9,1]
+res=getRatios(ratio1,ratio2)
+print(res)
+
+
+output:
+-------
+[0.16666666666666666, 0.2857142857142857, 0.375, 0.4444444444444444, 5.0]
     
 
 9.Assume that we execute the following assignment statements: width = 17 height = 12.0 delimiter = '.' For each of the following expressions, write the value of the expression and the type (of the value of the expression).
