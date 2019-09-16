@@ -67,7 +67,7 @@ for i in range(0,n):
 for j in numlist:
     if j%2!=0 and j>largest:                # give largest as 0 initially
         largest=j                    # if j is odd and largest when traversed using for loop - j will be largest
-if largest==0 :              #if thr is no odd number then largest will be 0 only - which makes it a list of even numbers - so print no                                 #odd numbers - else just print the largest
+if largest==0 :               #if thr is no odd number then largest will be 0 only - which makes it a list of even numbers - so print no                                 #odd numbers - else just print the largest
       print("there were no odd numbers")
 else:
     print(largest)
@@ -111,28 +111,44 @@ result=volume(5)
 print("The volume of the sphere is: ",result)
 
 
-b)book_price=24.95          # price of one book without discount
-discount=0.4                # amount of discount
-first_copy_cost=3.0          # shipping cost  of the first book alone
-additional_copy_cost=0.75     # shipping cost of the rest of the 59 books
-total_book=60                  # total no. of books
+OUTPUT:
+-------
+The volume of the sphere is:  523.3333333333334
+
+
+b)book_price=24.95                              # price of one book without discount
+discount=0.4                                     # amount of discount
+first_copy_cost=3.0                          # shipping cost  of the first book alone
+additional_copy_cost=0.75                           # shipping cost of the rest of the 59 books
+total_book=60                                     # total no. of books
 single_book_price=book_price*discount         #discount price of one book
 sale_price=book_price-single_book_price       # selling price of the discounted book
 
-first_copy=(sale_price+first_copy_cost)*1      #shipping cost+sale price of first book
+first_copy=(sale_price+first_copy_cost)*1            #shipping cost+sale price of first book
 additional_copy=sale_price*59+additional_copy_cost*59    #cost for the rest
 
 
 print("the wholesale cost of 60 copies is ",additional_copy+first_copy)
 
-c)starttimehr = 6 + (52 / 60.0)
-easyhr = (8 + (15 / 60.0 )) / 60.0
-tempohr = (7 + (12 / 60.0)) / 60.0
-runtimehr = 2 * easyhr + 3 * tempohr
-breakfasthr = starttimehr + runtimehr
-breakfastmin = (breakfasthr-int(breakfasthr))*60
-print ('Finish time was %d:%d' % (breakfasthr,breakfastmin))
 
+OUTPUT:
+-------
+the wholesale cost of 60 copies is  945.4499999999999
+
+
+
+c)starttimehr = 6 + (52 / 60.0)                    # here 6 is hr 52 is min we convert 52 to hr
+easyhr = (8 + (15 / 60.0 )) / 60.0                 #15 to min , 0.25+8 converted to hr
+tempohr = (7 + (12 / 60.0)) / 60.0                 #12 to min , 0.2+8 converted to hr
+runtimehr = 2 * easyhr + 3 * tempohr              # 2 miles for easy and 3 miles for tempo
+breakfasthr = starttimehr + runtimehr                 # here we calculate the total time
+breakfastmin = (breakfasthr-int(breakfasthr))*60       # here 7.5-7=0.5 , 0.5 is the hr i.e. 30 mins
+print ('Finish time was %d:%d' % (breakfasthr,breakfastmin))  #%d will print the int value
+
+
+OUTPUT:
+------
+Finish time was 7:30
 
 
 5.Write a program that asks the user to enter an integer and prints two integers, root and pwr, such that 0 < pwr < 6 and root**pwr is equal to the integer entered by the user. If no such pair of integers exists, it should print a message to that effect.
@@ -170,12 +186,22 @@ enter a string of numbers separated by comas1.23,3.45,5.67
 def isIn(x, y):
     if x in y:
         return True
+    elif y in x:
+        return True
     else:
         return False
 
 
 status=isIn(input("enter a string"),input("enter another string"))
 print("the status is: ",status)
+
+
+OUTPUT:
+------
+enter a string hello
+enter another string hell
+the status is:  True
+
 
 8.Implement a function that satisfies the specification. Use a try-except block.
 
@@ -193,6 +219,46 @@ def getRatios(vect1, vect2):
 >>> 1 + 2 * 5
 >>> delimiter * 5
 Use the Python interpreter to check your answers
+
+
+
+width = 17
+height = 12.0
+delimiter = '.'
+a=width/2
+print(a)
+print(type(a))
+
+b=width/2.0
+print(b)
+print(type(b))
+
+c=height/3
+print(c)
+print(type(c))
+
+d=1 + 2 * 5
+print(d)
+print(type(d))
+
+e=delimiter * 5
+print(e)
+print(type(e))
+
+
+
+OUTPUT:
+------
+8.5
+<class 'float'>
+8.5
+<class 'float'>
+4.0
+<class 'float'>
+11
+<class 'int'>
+.....
+<class 'str'>
 
 
 10.Observe the Code Snippet
