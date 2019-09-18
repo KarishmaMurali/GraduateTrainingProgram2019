@@ -1,0 +1,177 @@
+1.The greatest common divisor (GCD) of a and b is the largest number that divides both of them with no remainder. 
+One way to find the GCD of two numbers is based on the observation that if r is the remainder when a is divided by b, then gcd(a, b) = gcd(b, r). 
+As a base case, we can use gcd(a, 0) = a. Write a function called gcd that takes parameters a and b and returns their greatest common divisor.
+
+
+def gcd(a,b):
+    if(b==0):
+        return a
+    else:
+        return gcd(b,a%b)             #recursive function
+                                      #it will keep finding modulus of the two numbers till its 0 - when its 0 it prints the first number
+
+
+a=int(input("Enter first number:"))
+b=int(input("Enter second number:"))
+result=gcd(a,b)
+print("GCD is: ",result)
+
+
+
+OUTPUT:
+-------
+Enter first number: 24 
+Enter second number: 8
+GCD is:  8
+
+Enter first number: 27
+Enter second number: 5
+GCD is:  1
+
+
+
+2.# A number, a, is a power of b if it is divisible by b and a/b is a power of b.
+# Write a function called is_power that takes parameters a and b and returns True if a is a power of b.
+# Note: you will have to think about the base case.
+
+
+
+def is_power(a,b):
+
+    if a % b == 0:                           # here we first see if the first number is divisible by the second number
+        for i in range(1,a):                 # now we find if in the range of 1 to a - if i is a power of a
+            if b ** i == a:                   # here we check if the second number with the range is equal to the first number we gave
+                return True
+    else:
+        return False
+
+
+print(is_power(125,6))
+
+
+
+
+3.# Observe the following function definitions.They Calculate the Factorial as per the Mathematical definition 1! = 1(n + 1)! = (n + 1) * n!
+# Implement factI(n) as an Iterative Implementation & factR(n) as a Recursive Implementation
+#
+#
+# def factI(n):
+#     """Assumes that n is an int > 0
+#     Returns n!
+#     Uses Iterative Implementation"""
+#
+#
+# def factR(n):
+#     """Assumes that n is an int > 0
+#     Returns n!
+#     Uses Recursive Implementation"""
+
+
+def factR(n):
+    if n == 1:
+        return 1
+    else:
+        return n*factR(n-1)
+
+result = factR(int(input("Enter a number")))
+print("factorial:",result)
+
+def factI(n):
+    fact=1
+    i=1
+    while(i<=n):
+        fact=fact*i
+        i=i+1
+    return fact
+
+
+result = factI(int(input("Enter a number")))
+print("factorial:",result)
+
+
+
+OUTPUT:
+------
+Enter a number 12
+factorial: 479001600
+
+
+
+4.#Write a program that computes the decimal equivalent of the binary number 10011?
+
+def binary2decimal(binary):
+    decimal = 0
+    i = 0
+    while binary != 0:
+        dec = binary % 10
+        decimal = decimal + dec * pow(2, i)
+        binary = binary // 10
+        i += 1
+    return decimal
+
+
+result = binary2decimal(10011)
+print(result)
+
+
+
+'''binary = input("Enter a number:")
+decimal = 0
+for digit in binary:
+    decimal=decimal + int(digit)
+print(decimal)'''
+
+
+
+OUTPUT:
+------
+19
+
+
+
+5.# Implement a function that meets the specification below. Use a try-except block.
+#
+# def sumDigits(s):
+# 	"""Assumes s is a string
+# 	Returns the sum of the decimal digits in s
+# 	For example, if s is 'a2b3c' it returns 5"""
+
+def sumofdigits(str1):
+    sum = 0
+    for i in str1:
+        if i.isdigit() == True:          #string function to see if thr is a digit in the given string
+            z = int(i)                  #since its from a string - we first convert it to integer then add it to sum
+            sum = sum + z
+
+    return sum
+
+
+print(sumofdigits('12a34ff56h7'))
+
+
+
+output:
+-------
+28
+
+
+
+6.# Implement a function that satisfies the specification. Use a try-except block.
+# def findAnEven(l):
+# 	"""Assumes l is a list of integers
+# 	Returns the first even number in l
+# 	Raises ValueError if l does not contain an even number"""
+
+def findaneven(l):
+    try:
+        for number in l:
+            if number % 2 == 0:
+                print(number)
+                break
+
+
+l = [1,2,3,4,5,6,7,8]
+res = findaneven(l)
+print(res)
+
+
