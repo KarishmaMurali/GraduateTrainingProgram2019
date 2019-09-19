@@ -46,9 +46,21 @@ def is_power(a,b):
         return False
 
 
-print(is_power(125,6))
+result = is_power(int(input()),int(input()))
+print(result)
 
 
+
+OUTPUT:
+------
+125
+6
+False
+
+
+125
+5
+True
 
 
 3.# Observe the following function definitions.They Calculate the Factorial as per the Mathematical definition 1! = 1(n + 1)! = (n + 1) * n!
@@ -79,9 +91,9 @@ print("factorial:",result)
 def factI(n):
     fact=1
     i=1
-    while(i<=n):
+    for i in range(1,n+1):
         fact=fact*i
-        i=i+1
+        
     return fact
 
 
@@ -118,7 +130,7 @@ print(result)
 '''binary = input("Enter a number:")
 decimal = 0
 for digit in binary:
-    decimal=decimal + int(digit)
+    decimal=decimal*2+ int(digit)
 print(decimal)'''
 
 
@@ -173,5 +185,54 @@ def findaneven(l):
 l = [1,2,3,4,5,6,7,8]
 res = findaneven(l)
 print(res)
+
+
+
+
+
+# A palindrome is a word that is spelled the same backward and forward, like "Malayalam" and "Noon" .
+# Recursively, a word is a palindrome if the first and last letters are the same and the middle is a palindrome.
+# Write a function called is_palindrome that takes a string argument and returns True if it is a palindrome and False otherwise.
+# Remember that you can use the built-in function len to check the length of a string.
+# Use the function definition
+# def isPalindrome(s):
+# 	"""Assumes s is a str
+# 	Returns True if s is a palindrome; False otherwise.
+# 	Punctuation marks, blanks, and capitalization are
+# 	ignored."""
+# Ensure you build a test function testIsPalindrome() that tests your palindrome function.
+
+
+def ispalindrome(s):
+    w = ""
+    for i in s:
+        w = i + w
+    if s == w:
+        return True
+    else:
+        return False
+
+def testispalindrome():
+
+    s = input()
+    status = ispalindrome(s)
+
+    if status == True:
+        return "it is a palindrome"
+    else:
+        return "It is not a palindrome"
+
+
+print(testispalindrome())
+
+
+
+OUTPUT:
+-------
+lol 
+it is a palindrome
+
+dog
+It is not a palindrome
 
 
