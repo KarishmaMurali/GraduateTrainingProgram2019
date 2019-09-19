@@ -190,7 +190,7 @@ print(res)
 
 
 
-# A palindrome is a word that is spelled the same backward and forward, like "Malayalam" and "Noon" .
+7.# A palindrome is a word that is spelled the same backward and forward, like "Malayalam" and "Noon" .
 # Recursively, a word is a palindrome if the first and last letters are the same and the middle is a palindrome.
 # Write a function called is_palindrome that takes a string argument and returns True if it is a palindrome and False otherwise.
 # Remember that you can use the built-in function len to check the length of a string.
@@ -235,4 +235,40 @@ it is a palindrome
 dog
 It is not a palindrome
 
+
+
+8.# The built-in function eval takes a string and evaluates it using the Python interpreter. For example:
+# >>> eval('1 + 2 * 3')
+# 7
+# >>> import math
+# >>> eval('math.sqrt(5)')
+# 2.2360679774997898
+# >>> eval('type(math.pi)')
+# <type 'float'>
+# Write a function called eval_loop that iteratively prompts the user, takes the resulting input and evaluates it using eval, and prints the result.
+# It should continue until the user enters 'done', and then return the value of the last expression it evaluated.
+
+
+def eval_loop():
+    while True:
+        n = input("Enter a string:")
+        if n == 'done':
+            break
+        else:
+            result = eval(n)
+            print(result)
+    print(result)
+
+eval_loop()
+
+
+OUTPUT:
+-------
+Enter a string:1*4+6-4
+6
+Enter a string:done
+6
+
+
+9.
 
