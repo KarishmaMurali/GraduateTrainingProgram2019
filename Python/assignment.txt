@@ -13,7 +13,32 @@ input='10101010100111101'
 result = re.findall('101', input)
 print(len(result))
 
------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OR
+
+
+#DECIMAL TO BINARY
+#FIND THE BINARY EQUIVALENT OF 5 IN THE BELOW BINARY NUMBER
+import re
+
+input='10101010100111101' 
+num=5 
+result=bin(num).replace("0b","") 
+result = re.findall(result, input)
+print(len(result))
+
+OR
+
+input='10101010100111101'
+num=5
+count=0
+result=bin(num).replace("0b","")
+for i in range(0,len(input)):
+  if input[i:i+3]==result:
+    count=count+1
+  
+print(count)
+----------------------------------------------------------------------------------------------------------------------------------------
 
 2) For the below matrix , calculate both the diagonal and print the value.(Hint: consider each row as a list object)
 
